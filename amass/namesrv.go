@@ -92,7 +92,11 @@ func (ns *NameService) processRequests() {
 			for _, s := range perSec {
 				total += s
 			}
-			ns.Enum().Log.Printf("Average DNS names processed: %d/sec", total/num)
+			if ns.Enum().STDoutJSON {
+				ns.Enum().Log.Printf("{\"info\": \"Average DNS names processed: %d/sec\"}", total/num)
+			} else {
+				ns.Enum().Log.Printf("Average DNS names processed: %d/sec", total/num)
+			}
 			perSec = []int{}
 		case req := <-ns.RequestChan():
 			go ns.performRequest(req)

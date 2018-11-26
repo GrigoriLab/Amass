@@ -104,6 +104,9 @@ type Enumeration struct {
 	// Logger for error messages
 	Log *log.Logger
 
+	//flag to print on stdout in json format
+	STDoutJSON bool
+
 	// The writer used to save the data operations performed
 	DataOptsWriter io.Writer
 
@@ -146,6 +149,7 @@ func NewEnumeration() *Enumeration {
 		Output:            make(chan *AmassOutput, 100),
 		Done:              make(chan struct{}),
 		Log:               log.New(ioutil.Discard, "", 0),
+		STDoutJSON:              false,
 		trustedNameFilter: utils.NewStringFilter(),
 		otherNameFilter:   utils.NewStringFilter(),
 		pause:             make(chan struct{}),

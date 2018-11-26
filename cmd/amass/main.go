@@ -32,6 +32,7 @@ type outputParams struct {
 	PrintIPs bool
 	FileOut  string
 	JSONOut  string
+	STDOut   string
 }
 
 type asnData struct {
@@ -84,6 +85,7 @@ var (
 	logpath       = flag.String("log", "", "Path to the log file where errors will be written")
 	outpath       = flag.String("o", "", "Path to the text output file")
 	jsonpath      = flag.String("json", "", "Path to the JSON output file")
+	stdoutformat  = flag.String("stdout", "", "Specify stdout logging format")
 	datapath      = flag.String("do", "", "Path to data operations output file")
 	domainspath   = flag.String("df", "", "Path to a file providing root domain names")
 	resolvepath   = flag.String("rf", "", "Path to a file providing preferred DNS resolvers")
@@ -150,6 +152,7 @@ func main() {
 	logfile := *logpath
 	txt := *outpath
 	jsonfile := *jsonpath
+	outputformat := *stdoutformat
 	datafile := *datapath
 	if *allpath != "" {
 		logfile = *allpath + ".log"
@@ -172,6 +175,9 @@ func main() {
 	rLog, wLog := io.Pipe()
 	enum := amass.NewEnumeration()
 	enum.Log = log.New(wLog, "", log.Lmicroseconds)
+	if outputformat == "json" {
+		enum.STDoutJSON = true
+		}
 	enum.Config.Wordlist = words
 	enum.Config.BruteForcing = *brute
 	enum.Config.Recursive = recursive
@@ -313,6 +319,25 @@ func writeLogsAndMessages(logs *io.PipeReader, logfile *os.File) {
 		}
 	}
 }
+func writeJSONDataOnSTDOUT(f io.Writer, result *amass.AmassOutput) {
+	save := &jsonSave{
+		Name:   result.Name,
+		Domain: result.Domain,
+		Tag:    result.Tag,
+		Source: result.Source,
+	}
+
+	for _, addr := range result.Addresses {
+		save.Addresses = append(save.Addresses, jsonAddr{
+			IP:          addr.Address.String(),
+			CIDR:        addr.Netblock.String(),
+			ASN:         addr.ASN,
+			Description: addr.Description,
+		})
+	}
+	enc := json.NewEncoder(f)
+	enc.Encode(save)
+}
 
 func writeJSONData(f *os.File, result *amass.AmassOutput) {
 	save := &jsonSave{
@@ -412,8 +437,12 @@ func manageOutput(params *outputParams) {
 		updateData(result, tags, asns)
 
 		source, name, comma, ips := resultToLine(result, params)
-		fmt.Fprintf(color.Output, "%s%s%s%s\n",
-			blue(source), green(name), green(comma), yellow(ips))
+		if params.Enum.STDoutJSON {
+			writeJSONDataOnSTDOUT(color.Output, result)
+		} else {
+			fmt.Fprintf(color.Output, "%s%s%s%s\n",
+				blue(source), green(name), green(comma), yellow(ips))
+		}
 		// Handle writing the line to a specified output file
 		if outptr != nil {
 			fmt.Fprintf(outptr, "%s%s%s%s\n", source, name, comma, ips)
@@ -426,7 +455,9 @@ func manageOutput(params *outputParams) {
 	if total == 0 {
 		r.Println("No names were discovered")
 	} else {
-		printSummary(total, tags, asns)
+		if !params.Enum.STDoutJSON {
+			printSummary(total, tags, asns)
+		}
 	}
 	close(finished)
 }

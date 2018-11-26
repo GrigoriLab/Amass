@@ -415,10 +415,18 @@ func (ds *DNSService) getWildcard(sub string) *wildcard {
 		if match {
 			entry.WildcardType = WildcardTypeStatic
 			entry.Answers = set[0]
-			ds.Enum().Log.Printf("%s has a static DNS wildcard", sub)
+			if ds.Enum().STDoutJSON {
+				ds.Enum().Log.Printf("{\"info\": \"%s has a static DNS wildcard\"}", sub)
+			} else {
+				ds.Enum().Log.Printf("%s has a static DNS wildcard", sub)
+			}
 		} else {
 			entry.WildcardType = WildcardTypeDynamic
-			ds.Enum().Log.Printf("%s has a dynamic DNS wildcard", sub)
+			if ds.Enum().STDoutJSON {
+				ds.Enum().Log.Printf("{\"info\": \"%s has a dynamic DNS wildcard\"}", sub)
+			} else {
+				ds.Enum().Log.Printf("%s has a dynamic DNS wildcard", sub)
+			}
 		}
 	}
 	return entry
