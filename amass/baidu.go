@@ -82,7 +82,7 @@ func (b *Baidu) executeQuery(domain string) {
 			return
 		case <-t.C:
 			u := b.urlByPageNum(domain, i)
-			page, err := utils.RequestWebPage(u, nil, nil, "", "")
+			page, err := utils.RequestWebPage(u, nil, nil, "", "", b.Enum().Proxy)
 			if err != nil {
 				b.Enum().Log.Printf("%s: %s: %v", b.String(), u, err)
 				return

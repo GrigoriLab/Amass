@@ -62,7 +62,7 @@ func (p *PTRArchive) startRootDomains() {
 
 func (p *PTRArchive) executeQuery(domain string) {
 	url := p.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", p.Enum().Proxy)
 	if err != nil {
 		p.Enum().Log.Printf("%s: %s: %v", p.String(), url, err)
 		return

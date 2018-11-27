@@ -76,7 +76,7 @@ func (y *Yahoo) executeQuery(domain string) {
 			return
 		case <-t.C:
 			u := y.urlByPageNum(domain, i)
-			page, err := utils.RequestWebPage(u, nil, nil, "", "")
+			page, err := utils.RequestWebPage(u, nil, nil, "", "", y.Enum().Proxy)
 			if err != nil {
 				y.Enum().Log.Printf("%s: %s: %v", y.String(), u, err)
 				return

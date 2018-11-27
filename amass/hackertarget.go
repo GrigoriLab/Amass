@@ -62,7 +62,7 @@ func (h *HackerTarget) startRootDomains() {
 
 func (h *HackerTarget) executeQuery(domain string) {
 	url := h.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", h.Enum().Proxy)
 	if err != nil {
 		h.Enum().Log.Printf("%s: %s: %v", h.String(), url, err)
 		return

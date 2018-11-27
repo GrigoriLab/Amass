@@ -86,6 +86,7 @@ var (
 	outpath       = flag.String("o", "", "Path to the text output file")
 	jsonpath      = flag.String("json", "", "Path to the JSON output file")
 	stdoutformat  = flag.String("stdout", "", "Specify stdout logging format")
+	proxy_url	  = flag.String("proxy", "", "Specify proxy server")
 	datapath      = flag.String("do", "", "Path to data operations output file")
 	domainspath   = flag.String("df", "", "Path to a file providing root domain names")
 	resolvepath   = flag.String("rf", "", "Path to a file providing preferred DNS resolvers")
@@ -153,6 +154,7 @@ func main() {
 	txt := *outpath
 	jsonfile := *jsonpath
 	outputformat := *stdoutformat
+	proxy := *proxy_url
 	datafile := *datapath
 	if *allpath != "" {
 		logfile = *allpath + ".log"
@@ -177,7 +179,10 @@ func main() {
 	enum.Log = log.New(wLog, "", log.Lmicroseconds)
 	if outputformat == "json" {
 		enum.STDoutJSON = true
-		}
+	}
+	if proxy != "" {
+		enum.Proxy = proxy
+	}
 	enum.Config.Wordlist = words
 	enum.Config.BruteForcing = *brute
 	enum.Config.Recursive = recursive

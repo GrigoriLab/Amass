@@ -93,7 +93,7 @@ func (c *CommonCrawl) executeQuery(domain string) {
 			return
 		case <-t.C:
 			u := c.getURL(index, domain)
-			page, err := utils.RequestWebPage(u, nil, nil, "", "")
+			page, err := utils.RequestWebPage(u, nil, nil, "", "",c.Enum().Proxy)
 			if err != nil {
 				c.Enum().Log.Printf("%s: %s: %v", c.String(), u, err)
 				continue

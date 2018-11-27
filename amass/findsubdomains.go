@@ -62,7 +62,8 @@ func (f *FindSubdomains) startRootDomains() {
 
 func (f *FindSubdomains) executeQuery(domain string) {
 	url := f.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	f.Enum().Log.Printf("proxy server: %s", f.Enum().Proxy)
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", f.Enum().Proxy)
 	if err != nil {
 		f.Enum().Log.Printf("%s: %s: %v", f.String(), url, err)
 		return

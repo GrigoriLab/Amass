@@ -73,7 +73,7 @@ func (r *Robtex) executeQuery(domain string) {
 	var ips []string
 
 	url := "https://freeapi.robtex.com/pdns/forward/" + domain
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", r.Enum().Proxy)
 	if err != nil {
 		r.Enum().Log.Printf("%s: %s: %v", r.String(), url, err)
 		return
@@ -104,7 +104,7 @@ loop:
 			break loop
 		case <-t.C:
 			url = "https://freeapi.robtex.com/pdns/reverse/" + ip
-			pdns, err := utils.RequestWebPage(url, nil, nil, "", "")
+			pdns, err := utils.RequestWebPage(url, nil, nil, "", "",r.Enum().Proxy)
 			if err != nil {
 				r.Enum().Log.Printf("%s: %s: %v", r.String(), url, err)
 				continue

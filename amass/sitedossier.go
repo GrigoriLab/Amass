@@ -62,7 +62,7 @@ func (s *SiteDossier) startRootDomains() {
 
 func (s *SiteDossier) executeQuery(domain string) {
 	url := s.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", s.Enum().Proxy)
 	if err != nil {
 		s.Enum().Log.Printf("%s: %s: %v", s.String(), url, err)
 		return

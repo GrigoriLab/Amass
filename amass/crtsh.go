@@ -74,7 +74,7 @@ func (c *Crtsh) startRootDomains() {
 
 func (c *Crtsh) executeQuery(domain string) {
 	url := c.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", c.Enum().Proxy)
 	if err != nil {
 		c.Enum().Log.Printf("%s: %s: %v", c.String(), url, err)
 		return

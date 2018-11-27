@@ -62,7 +62,7 @@ func (n *Netcraft) startRootDomains() {
 
 func (n *Netcraft) executeQuery(domain string) {
 	url := n.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", n.Enum().Proxy)
 	if err != nil {
 		n.Enum().Log.Printf("%s: %s, %v", n.String(), url, err)
 		return

@@ -63,7 +63,7 @@ func (c *CertDB) startRootDomains() {
 
 func (c *CertDB) executeQuery(domain string) {
 	u := c.getURL(domain)
-	page, err := utils.RequestWebPage(u, nil, nil, "", "")
+	page, err := utils.RequestWebPage(u, nil, nil, "", "", c.Enum().Proxy)
 	if err != nil {
 		c.Enum().Log.Printf("%s: %s: %v", c.String(), u, err)
 		return

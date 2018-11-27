@@ -113,6 +113,7 @@ type Enumeration struct {
 	// MaxFlow is a Semaphore that restricts the number of names moving through the architecture
 	MaxFlow utils.Semaphore
 
+	Proxy  string
 	nameService  *NameService
 	addrService  *AddressService
 	dnsService   *DNSService
@@ -150,6 +151,7 @@ func NewEnumeration() *Enumeration {
 		Done:              make(chan struct{}),
 		Log:               log.New(ioutil.Discard, "", 0),
 		STDoutJSON:              false,
+		Proxy: 			   "",
 		trustedNameFilter: utils.NewStringFilter(),
 		otherNameFilter:   utils.NewStringFilter(),
 		pause:             make(chan struct{}),
@@ -186,7 +188,7 @@ func (e *Enumeration) CheckConfig() error {
 		e.Config.Ports = []int{443}
 	}
 	if len(e.Config.Wordlist) == 0 {
-		e.Config.Wordlist, err = getDefaultWordlist()
+		e.Config.Wordlist, err = getDefaultWordlist(e.Proxy)
 	}
 
 	e.MaxFlow = utils.NewTimedSemaphore(
@@ -463,10 +465,10 @@ func (t EnumerationTiming) ToReleasesPerSecond() int {
 	return result
 }
 
-func getDefaultWordlist() ([]string, error) {
+func getDefaultWordlist(proxy_url string) ([]string, error) {
 	var list []string
 
-	page, err := utils.RequestWebPage(defaultWordlistURL, nil, nil, "", "")
+	page, err := utils.RequestWebPage(defaultWordlistURL, nil, nil, "", "", proxy_url)
 	if err != nil {
 		return list, err
 	}

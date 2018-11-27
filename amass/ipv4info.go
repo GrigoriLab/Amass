@@ -68,7 +68,7 @@ func (i *IPv4Info) startRootDomains() {
 
 func (i *IPv4Info) executeQuery(domain string) {
 	url := i.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", i.Enum().Proxy)
 	if err != nil {
 		i.Enum().Log.Printf("%s: %s: %v", i.String(), url, err)
 		return
@@ -77,7 +77,7 @@ func (i *IPv4Info) executeQuery(domain string) {
 	i.SetActive()
 	time.Sleep(time.Second)
 	url = i.ipSubmatch(page, domain)
-	page, err = utils.RequestWebPage(url, nil, nil, "", "")
+	page, err = utils.RequestWebPage(url, nil, nil, "", "", i.Enum().Proxy)
 	if err != nil {
 		i.Enum().Log.Printf("%s: %s: %v", i.String(), url, err)
 		return
@@ -86,7 +86,7 @@ func (i *IPv4Info) executeQuery(domain string) {
 	i.SetActive()
 	time.Sleep(time.Second)
 	url = i.domainSubmatch(page, domain)
-	page, err = utils.RequestWebPage(url, nil, nil, "", "")
+	page, err = utils.RequestWebPage(url, nil, nil, "", "", i.Enum().Proxy)
 	if err != nil {
 		i.Enum().Log.Printf("%s: %s: %v", i.String(), url, err)
 		return
@@ -95,7 +95,7 @@ func (i *IPv4Info) executeQuery(domain string) {
 	i.SetActive()
 	time.Sleep(time.Second)
 	url = i.subdomainSubmatch(page, domain)
-	page, err = utils.RequestWebPage(url, nil, nil, "", "")
+	page, err = utils.RequestWebPage(url, nil, nil, "", "", i.Enum().Proxy)
 	if err != nil {
 		i.Enum().Log.Printf("%s: %s: %v", i.String(), url, err)
 		return

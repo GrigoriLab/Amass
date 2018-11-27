@@ -62,7 +62,7 @@ func (t *ThreatCrowd) startRootDomains() {
 
 func (t *ThreatCrowd) executeQuery(domain string) {
 	url := t.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", t.Enum().Proxy)
 	if err != nil {
 		t.Enum().Log.Printf("%s: %s: %v", t.String(), url, err)
 		return

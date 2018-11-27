@@ -65,7 +65,7 @@ func (d *DNSDB) startRootDomains() {
 
 func (d *DNSDB) executeQuery(domain string) {
 	url := d.getURL(domain, domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", d.Enum().Proxy)
 	if err != nil {
 		d.Enum().Log.Printf("%s: %s: %v", d.String(), url, err)
 		return
@@ -90,7 +90,7 @@ loop:
 		case <-d.Quit():
 			break loop
 		case <-t.C:
-			another, err := utils.RequestWebPage(url+rel, nil, nil, "", "")
+			another, err := utils.RequestWebPage(url+rel, nil, nil, "", "", d.Enum().Proxy)
 			if err != nil {
 				d.Enum().Log.Printf("%s: %s: %v", d.String(), url+rel, err)
 				continue

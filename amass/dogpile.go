@@ -82,7 +82,7 @@ func (d *Dogpile) executeQuery(domain string) {
 			return
 		case <-t.C:
 			u := d.urlByPageNum(domain, i)
-			page, err := utils.RequestWebPage(u, nil, nil, "", "")
+			page, err := utils.RequestWebPage(u, nil, nil, "", "", d.Enum().Proxy)
 			if err != nil {
 				d.Enum().Log.Printf("%s: %s: %v", d.String(), u, err)
 				return

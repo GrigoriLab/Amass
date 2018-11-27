@@ -82,7 +82,7 @@ func (a *Ask) executeQuery(domain string) {
 			return
 		case <-t.C:
 			u := a.urlByPageNum(domain, i)
-			page, err := utils.RequestWebPage(u, nil, nil, "", "")
+			page, err := utils.RequestWebPage(u, nil, nil, "", "", a.Enum().Proxy)
 			if err != nil {
 				a.Enum().Log.Printf("%s: %s: %v", a.String(), u, err)
 				return

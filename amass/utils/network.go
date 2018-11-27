@@ -10,6 +10,7 @@ import (
 	"math/big"
 	"net"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -30,12 +31,13 @@ const (
 
 // RequestWebPage returns a string containing the entire response for
 // the url parameter when successful.
-func RequestWebPage(url string, body io.Reader, hvals map[string]string, uid, secret string) (string, error) {
+func RequestWebPage(url_str string, body io.Reader, hvals map[string]string, uid, secret string, proxy_url_str ...string) (string, error) {
 	method := "GET"
 	if body != nil {
 		method = "POST"
 	}
-	req, err := http.NewRequest(method, url, body)
+
+	req, err := http.NewRequest(method, url_str, body)
 	if err != nil {
 		return "", err
 	}
@@ -53,6 +55,7 @@ func RequestWebPage(url string, body io.Reader, hvals map[string]string, uid, se
 	}
 
 	d := net.Dialer{}
+
 	client := &http.Client{
 		Timeout: 30 * time.Second,
 		Transport: &http.Transport{
@@ -62,6 +65,17 @@ func RequestWebPage(url string, body io.Reader, hvals map[string]string, uid, se
 			TLSHandshakeTimeout:   10 * time.Second,
 			ExpectContinueTimeout: 5 * time.Second,
 		},
+	}
+	if len(proxy_url_str)  > 0 && proxy_url_str[0] != "" {
+		proxyURL, _ := url.Parse(proxy_url_str[0])
+		client.Transport =  &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+			DialContext:           d.DialContext,
+			MaxIdleConns:          200,
+			IdleConnTimeout:       90 * time.Second,
+			TLSHandshakeTimeout:   10 * time.Second,
+			ExpectContinueTimeout: 5 * time.Second,
+		}
 	}
 	resp, err := client.Do(req)
 	if err != nil {

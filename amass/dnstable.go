@@ -62,7 +62,7 @@ func (d *DNSTable) startRootDomains() {
 
 func (d *DNSTable) executeQuery(domain string) {
 	url := d.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", d.Enum().Proxy)
 	if err != nil {
 		d.Enum().Log.Printf("%s: %s: %v", d.String(), url, err)
 		return

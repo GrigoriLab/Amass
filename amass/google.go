@@ -82,7 +82,7 @@ func (g *Google) executeQuery(domain string) {
 			return
 		case <-t.C:
 			u := g.urlByPageNum(domain, i)
-			page, err := utils.RequestWebPage(u, nil, nil, "", "")
+			page, err := utils.RequestWebPage(u, nil, nil, "", "", g.Enum().Proxy)
 			if err != nil {
 				g.Enum().Log.Printf("%s: %s: %v", g.String(), u, err)
 				return

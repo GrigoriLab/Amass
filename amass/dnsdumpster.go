@@ -68,7 +68,7 @@ func (d *DNSDumpster) startRootDomains() {
 
 func (d *DNSDumpster) executeQuery(domain string) {
 	u := "https://dnsdumpster.com/"
-	page, err := utils.RequestWebPage(u, nil, nil, "", "")
+	page, err := utils.RequestWebPage(u, nil, nil, "", "", d.Enum().Proxy)
 	if err != nil {
 		d.Enum().Log.Printf("%s: %s: %v", d.String(), u, err)
 		return

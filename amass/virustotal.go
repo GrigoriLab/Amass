@@ -63,7 +63,7 @@ func (v *VirusTotal) startRootDomains() {
 func (v *VirusTotal) executeQuery(domain string) {
 	re := v.Enum().Config.DomainRegex(domain)
 	url := v.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", v.Enum().Proxy)
 	if err != nil {
 		v.Enum().Log.Printf("%s: %s: %v", v.String(), url, err)
 		return

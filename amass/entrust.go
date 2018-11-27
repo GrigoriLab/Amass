@@ -64,7 +64,7 @@ func (e *Entrust) startRootDomains() {
 
 func (e *Entrust) executeQuery(domain string) {
 	u := e.getURL(domain)
-	page, err := utils.RequestWebPage(u, nil, nil, "", "")
+	page, err := utils.RequestWebPage(u, nil, nil, "", "", e.Enum().Proxy)
 	if err != nil {
 		e.Enum().Log.Printf("%s: %s: %v", e.String(), u, err)
 		return

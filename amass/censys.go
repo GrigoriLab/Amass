@@ -75,12 +75,11 @@ func (c *Censys) executeQuery(domain string) {
 		}
 		body := bytes.NewBuffer(jsonStr)
 		headers := map[string]string{"Content-Type": "application/json"}
-		page, err = utils.RequestWebPage(url, body, headers, key.UID, key.Secret)
+		page, err = utils.RequestWebPage(url, body, headers, key.UID, key.Secret, c.Enum().Proxy)
 		fmt.Println(page)
 	} else {
 		url = c.webURL(domain)
-
-		page, err = utils.RequestWebPage(url, nil, nil, "", "")
+		page, err = utils.RequestWebPage(url, nil, nil, "", "", c.Enum().Proxy)
 	}
 
 	if err != nil {

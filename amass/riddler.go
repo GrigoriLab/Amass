@@ -62,7 +62,7 @@ func (r *Riddler) startRootDomains() {
 
 func (r *Riddler) executeQuery(domain string) {
 	url := r.getURL(domain)
-	page, err := utils.RequestWebPage(url, nil, nil, "", "")
+	page, err := utils.RequestWebPage(url, nil, nil, "", "", r.Enum().Proxy)
 	if err != nil {
 		r.Enum().Log.Printf("%s: %s: %v", r.String(), url, err)
 		return
